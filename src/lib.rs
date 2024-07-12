@@ -111,10 +111,10 @@ pub mod __private {
                     match self {
                         Some(value) => {
                             let value = crate::toml::Value::try_from(value).unwrap();
-                            output.push_str(&format!("{} = {}\n\n", field_name, value));
+                            output.push_str(&format!("{} = {}\n", field_name, value));
                         }
                         None => {
-                            output.push_str(&format!("#{} = \n\n", field_name));
+                            output.push_str(&format!("#{} = \n", field_name));
                         }
                     }
 
