@@ -1,3 +1,6 @@
 # toml-config
 
-Serialize Rust structs to toml, including doc comments
+Export structs to toml, converting Rust doc strings to comments.
+
+Supports one level of nesting. Fields containing structs must come
+after regular fields.
