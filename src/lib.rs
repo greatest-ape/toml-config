@@ -92,7 +92,7 @@ pub mod __private {
                         output.push_str(&comment);
                     }
 
-                    let value = crate::toml::ser::to_string(self).unwrap();
+                    let value = crate::toml::Value::try_from(self).unwrap();
 
                     output.push_str(&format!("{} = {}\n", field_name, value));
 
