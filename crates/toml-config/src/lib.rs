@@ -24,7 +24,7 @@ macro_rules! gen_serialize_deserialize_test {
 ///
 /// Usage:
 /// ```
-/// use aquatic_toml_config::TomlConfig;
+/// use toml_config::TomlConfig;
 ///
 /// #[derive(TomlConfig)]
 /// struct SubConfig {
