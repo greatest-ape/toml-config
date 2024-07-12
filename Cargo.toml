@@ -1,0 +1,17 @@
+[workspace]
+members = [ 
+    "crates/toml-config",
+    "crates/toml-config-derive",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Joakim Frostegård <joakim.frostegard@gmail.com>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/greatest-ape/toml-config"
+readme = "./README.md"
+
+[workspace.dependencies]
+toml-config-derive = { version = "0.1.0", path = "./crates/toml-config-derive" }
