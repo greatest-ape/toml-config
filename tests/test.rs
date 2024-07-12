@@ -1,6 +1,6 @@
 use serde::Deserialize;
-
-use toml_config::{gen_serialize_deserialize_test, TomlConfig};
+use toml_config::gen_serialize_deserialize_test;
+use toml_config::TomlConfig;
 
 /// Comment for TestConfig
 #[derive(Clone, Debug, PartialEq, Eq, TomlConfig, Deserialize)]
@@ -78,7 +78,7 @@ fn test_with_options() {
     }
 
     assert_eq!(
-        "# Some comment\na = \"Hello World\"\n# An option without a value\n#b = \n\n# An option with a value\nc = 42\n\n# The last comment\nd = 420\n",
+        "# Some comment\na = \"Hello World\"\n# An option without a value\n#b = \n# An option with a value\nc = 42\n# The last comment\nd = 420\n",
         Test::default_to_string(),
     )
 }
@@ -128,7 +128,73 @@ fn nested_test() {
     let result = MyConfig::default_to_string();
 
     assert_eq!(
-        "# Some self-explaining comment\nsome_value = \"Hello World\"\n# Option value with default value\n#some_optional_value = \n\n# Option value defaulting to `None`\nsome_optional_value_filled = 42\n\n\n[nested_config]\n# Yes, nesting is important\nnested_value = \"This value is nested\"\n",
+        "# Some self-explaining comment\nsome_value = \"Hello World\"\n# Option value with default value\n#some_optional_value = \n# Option value defaulting to `None`\nsome_optional_value_filled = 42\n\n[nested_config]\n# Yes, nesting is important\nnested_value = \"This value is nested\"\n",
+        result
+    );
+}
+
+#[test]
+fn vec_test() {
+    #[derive(TomlConfig)]
+    struct MyConfig {
+        /// String Vector
+        str_vector: Vec<String>,
+
+        /// usize Vector
+        usize_vector: Vec<usize>,
+
+        /// empty String Vector
+        str_vector_empty: Vec<String>,
+    }
+
+    impl Default for MyConfig {
+        fn default() -> Self {
+            Self {
+                str_vector: vec!["hello".into(), "world".into()],
+                usize_vector: vec![3, 2],
+                str_vector_empty: vec![],
+            }
+        }
+    }
+
+    // Get the config file
+    let result = MyConfig::default_to_string();
+
+    assert_eq!(
+        "# String Vector\nstr_vector = [\n    \"hello\",\n    \"world\",\n]\n# usize Vector\nusize_vector = [\n    3,\n    2,\n]\n# empty String Vector\nstr_vector_empty = []\n",
+        result
+    );
+}
+
+#[test]
+fn option_vec_test() {
+    #[derive(TomlConfig)]
+    struct MyConfig {
+        /// String Vector
+        str_vector: Option<Vec<String>>,
+
+        /// usize Vector
+        usize_vector: Option<Vec<usize>>,
+
+        /// empty String Vector
+        str_vector_empty: Option<Vec<String>>,
+    }
+
+    impl Default for MyConfig {
+        fn default() -> Self {
+            Self {
+                str_vector: Some(vec!["hello".into(), "world".into()]),
+                usize_vector: Some(vec![3, 2]),
+                str_vector_empty: None,
+            }
+        }
+    }
+
+    // Get the config file
+    let result = MyConfig::default_to_string();
+
+    assert_eq!(
+        "# String Vector\nstr_vector = [\n    \"hello\",\n    \"world\",\n]\n# usize Vector\nusize_vector = [\n    3,\n    2,\n]\n# empty String Vector\n#str_vector_empty = []\n",
         result
     );
 }

@@ -1,6 +1,15 @@
-use proc_macro2::{TokenStream, TokenTree};
-use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Fields, Ident, Type};
+use proc_macro2::TokenStream;
+use proc_macro2::TokenTree;
+use quote::quote;
+use quote::ToTokens;
+use syn::parse_macro_input;
+use syn::Attribute;
+use syn::Data;
+use syn::DataStruct;
+use syn::DeriveInput;
+use syn::Fields;
+use syn::Ident;
+use syn::Type;
 
 #[proc_macro_derive(TomlConfig)]
 pub fn derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {

@@ -121,6 +121,65 @@ pub mod __private {
                     output
                 }
             }
+
+            impl Private for Vec<$ident> {
+                fn __to_string(&self, comment: Option<String>, field_name: String) -> String {
+                    let mut output = String::new();
+
+                    if let Some(comment) = comment {
+                        output.push_str(&comment);
+                    }
+
+                    if self.len() == 0 {
+                        output.push_str(&format!("{} = []\n", field_name));
+                    } else {
+                        output.push_str(&format!("{} = [\n", field_name));
+
+                        for val in self {
+                            let value = crate::toml::Value::try_from(val).unwrap();
+
+                            output.push_str(&format!("    {},\n", value));
+                        }
+
+                        output.push_str("]\n");
+                    }
+
+                    output
+                }
+            }
+
+            impl Private for Option<Vec<$ident>> {
+                fn __to_string(&self, comment: Option<String>, field_name: String) -> String {
+                    let mut output = String::new();
+
+                    if let Some(comment) = comment {
+                        output.push_str(&comment);
+                    }
+
+                    match self {
+                        Some(value) => {
+                            if value.len() == 0 {
+                                output.push_str(&format!("{} = []\n", field_name));
+                            } else {
+                                output.push_str(&format!("{} = [\n", field_name));
+
+                                for val in value {
+                                    let value = crate::toml::Value::try_from(val).unwrap();
+
+                                    output.push_str(&format!("    {},\n", value));
+                                }
+
+                                output.push_str("]\n");
+                            }
+                        }
+                        None => {
+                            output.push_str(&format!("#{} = []\n", field_name));
+                        }
+                    }
+
+                    output
+                }
+            }
         };
     }
 
