@@ -8,9 +8,9 @@ macro_rules! gen_serialize_deserialize_test {
     ($ident:ident) => {
         #[test]
         fn test_cargo_toml_serialize_deserialize() {
-            use ::aquatic_toml_config::TomlConfig;
+            use ::toml_config::TomlConfig;
             let serialized = $ident::default_to_string();
-            let deserialized = ::aquatic_toml_config::toml::de::from_str(&serialized).unwrap();
+            let deserialized = ::toml_config::toml::de::from_str(&serialized).unwrap();
 
             assert_eq!($ident::default(), deserialized);
         }
