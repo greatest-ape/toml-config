@@ -99,6 +99,28 @@ pub mod __private {
                     output
                 }
             }
+
+            impl Private for Option<$ident> {
+                fn __to_string(&self, comment: Option<String>, field_name: String) -> String {
+                    let mut output = String::new();
+
+                    if let Some(comment) = comment {
+                        output.push_str(&comment);
+                    }
+
+                    match self {
+                        Some(value) => {
+                            let value = crate::toml::Value::try_from(value).unwrap();
+                            output.push_str(&format!("{} = {}\n\n", field_name, value));
+                        }
+                        None => {
+                            output.push_str(&format!("#{} = \n\n", field_name));
+                        }
+                    }
+
+                    output
+                }
+            }
         };
     }
 
