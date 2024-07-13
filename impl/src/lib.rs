@@ -1,6 +1,15 @@
-use proc_macro2::{TokenStream, TokenTree};
+use proc_macro2::TokenStream;
+use proc_macro2::TokenTree;
 use quote::quote;
-use syn::{parse_macro_input, Attribute, Data, DataStruct, DeriveInput, Fields, Ident, Type};
+use quote::ToTokens;
+use syn::parse_macro_input;
+use syn::Attribute;
+use syn::Data;
+use syn::DataStruct;
+use syn::DeriveInput;
+use syn::Fields;
+use syn::Ident;
+use syn::Type;
 
 #[proc_macro_derive(TomlConfig)]
 pub fn derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -78,7 +87,7 @@ pub fn derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
                         output.push_str(&comment);
                     }
 
-                    let value = match ::toml_config::toml::ser::to_string(self) {
+                    let value = match ::toml_config::toml::Value::try_from(self) {
                         Ok(value) => value,
                         Err(err) => panic!("Couldn't serialize enum to toml: {:#}", err),
                     };
@@ -135,7 +144,7 @@ fn extract_comment_string(attrs: Vec<Attribute>) -> TokenStream {
     let mut output = String::new();
 
     for attr in attrs.into_iter() {
-        let path_ident = if let Some(path_ident) = attr.path.get_ident() {
+        let path_ident = if let Some(path_ident) = attr.path().get_ident() {
             path_ident
         } else {
             continue;
@@ -145,7 +154,7 @@ fn extract_comment_string(attrs: Vec<Attribute>) -> TokenStream {
             continue;
         }
 
-        for token_tree in attr.tokens {
+        for token_tree in attr.meta.to_token_stream() {
             if let TokenTree::Literal(literal) = token_tree {
                 let mut comment = format!("{}", literal);
 

@@ -1,17 +1,27 @@
-[workspace]
-members = [ 
-    "crates/toml-config",
-    "crates/toml-config-derive",
-]
-resolver = "2"
-
-[workspace.package]
+[package]
+name = "toml-config"
 version = "0.1.0"
-authors = ["Joakim Frostegård <joakim.frostegard@gmail.com>"]
+authors = [
+    "Joakim Frostegård <joakim.frostegard@gmail.com>",
+    "Daniel Hackbarth <daniel.hackbarth96@gmail.com>",
+]
 edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/greatest-ape/toml-config"
 readme = "./README.md"
 
-[workspace.dependencies]
-toml-config-derive = { version = "0.1.0", path = "./crates/toml-config-derive" }
+[lib]
+name = "toml_config"
+
+[dependencies]
+toml-config-derive = { version = "=0.1.0", path = "impl" }
+toml = "0.8.14"
+
+[dev-dependencies]
+serde = { version = "1.0.204", features = ["derive"] }
+quickcheck = "1.0.3"
+quickcheck_macros = "1"
+
+[workspace]
+members = ["impl"]
+resolver = "2"
